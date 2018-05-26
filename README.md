@@ -4,6 +4,7 @@ A toolkit for functional programming in Python
 # Examples
 ```python
 from functools import partial
+from fpbox.fpbox import *
 
 xs = Array([1, 2, 3])
 sum_of_xs = foldr(lambda x, y: x + y, 0, xs)
