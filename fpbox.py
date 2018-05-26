@@ -1,17 +1,13 @@
 from functools import reduce
+from collections.abc import Sequence
 
 
 def head(xs):
     return xs[0]
 
 
-def unsafe_tail(xs):
-    """Might not always return a list"""
-    return xs[1:]
-
-
 def tail(xs):
-    return list(xs[1:])
+    return xs[1:]
 
 
 def last(xs):
@@ -19,12 +15,7 @@ def last(xs):
 
 
 def init(xs):
-    return list(xs[:-1])
-
-
-def unsafe_init(xs):
-    """Might not always return a list"""
-    return xs[1:]
+    return xs[:-1]
 
 
 def map(f, xs):
@@ -60,7 +51,7 @@ def c(f, g):
     return lambda x: f(g(x))
 
 
-class Array:
+class Array(Sequence):
     """
     Immutable list where all items can only be of a single type
     """
@@ -78,13 +69,8 @@ class Array:
             other = other._items
         return Array([x for x in self._items] + [x for x in other])
 
-    def __iter__(self):
-        for x in self._items:
-            yield x
-
-    def __reversed__(self):
-        for x in reversed(self._items):
-            yield x
-
     def __getitem__(self, item):
         return self._items[item]
+
+    def __len__(self):
+        return len(self._items)
