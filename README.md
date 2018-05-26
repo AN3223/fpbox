@@ -1,6 +1,9 @@
 # FPbox
 A toolkit for functional programming in Python
 
+# Install
+`pip install fpbox`
+
 # Examples
 ```python
 from functools import partial
