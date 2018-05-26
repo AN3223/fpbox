@@ -1,4 +1,4 @@
-from functools import reduce, partial
+from functools import reduce
 
 
 def head(xs):
@@ -10,7 +10,7 @@ def unsafe_tail(xs):
     return xs[1:]
 
 
-def tail(xs: list):
+def tail(xs):
     return list(xs[1:])
 
 
@@ -18,7 +18,7 @@ def last(xs):
     return xs[-1]
 
 
-def init(xs: list):
+def init(xs):
     return list(xs[:-1])
 
 
@@ -85,3 +85,6 @@ class Array:
     def __reversed__(self):
         for x in reversed(self._items):
             yield x
+
+    def __getitem__(self, item):
+        return self._items[item]
