@@ -33,6 +33,11 @@ def filter(f, xs):
     return [x for x in xs if f(x)]
 
 
+def sum(xs):
+    """Sum implementation that also works on non-int types"""
+    return reduce(lambda x, y: x + y, xs)
+
+
 def bool_filter(f, xs):
     """Strict version of filter (no truthiness, only booleans)"""
     return [x for x in xs if f(x) is True]
@@ -51,6 +56,11 @@ def reverse(xs):
     return type(xs)(reversed(xs))
 
 
+def chars(string):
+    """Returns an array of characters"""
+    return Array(map(Char, string))
+
+
 def c(f, g):
     """Function composition"""
     return lambda x: f(g(x))
@@ -66,19 +76,39 @@ class Array(Sequence):
             if isinstance(head(items), list):
                 items = head(items)
             if isgenerator(head(items)):
-                items = [x for x in head(items)]
-        self._items = [x for x in items if isinstance(x, type(head(items)))]
+                items = list(head(items))
+        self.items = tuple([x for x in items if isinstance(x, type(head(items)))])
 
     def __repr__(self):
-        return str(self._items)
+        if isinstance(head(self.items), Char):  # Creates a representation of [Char]
+            unpacked_chars = map(lambda x: x.char, self.items)
+            return '"{}"'.format(sum(unpacked_chars))
+        return str(list(self.items))
 
     def __add__(self, other):
         if isinstance(other, Array):
-            other = other._items
-        return Array([x for x in self._items] + [x for x in other])
+            other = other.items
+        return Array(list(self.items) + list(other))
 
     def __getitem__(self, item):
-        return self._items[item]
+        return self.items[item]
 
     def __len__(self):
-        return len(self._items)
+        return len(self.items)
+
+
+class Char:
+    def __init__(self, char):
+        if isinstance(char, str) and len(char) == 1:
+            self.char = char
+        else:
+            raise Exception("Invalid char")
+
+    def __repr__(self):
+        return "'{}'".format(self.char)
+
+    def __str__(self):
+        return self.char
+
+    def __add__(self, other):
+        return self.char + other
