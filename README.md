@@ -18,6 +18,7 @@ three = last(xs)
 one_two = init(xs)
 fn_composition = c(last, c(reverse, partial(map, lambda x: x + 1)))(xs)
 reversed_string = reverse(chars("Racecar"))
+string_comprehension = Array([Char(x) for x in 'hello' if not x == 'o'])
 ```
 
 # Reference
