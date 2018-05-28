@@ -17,6 +17,7 @@ two_three = tail(xs)
 three = last(xs)
 one_two = init(xs)
 fn_composition = c(last, c(reverse, partial(map, lambda x: x + 1)))(xs)
+reversed_string = reverse(chars("Racecar"))
 ```
 
 # Reference
