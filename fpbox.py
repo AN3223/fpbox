@@ -1,5 +1,10 @@
 from functools import reduce
 from collections.abc import Sequence
+from inspect import isgenerator
+
+
+class FPboxException(Exception):
+    pass
 
 
 def head(xs):
@@ -42,8 +47,8 @@ def foldr(f, acc, xs):
 
 
 def reverse(xs):
-    """Returns a sequence reversed as a list"""
-    return [x for x in reversed(xs)]
+    """Returns a reversed sequence"""
+    return type(xs)(reversed(xs))
 
 
 def c(f, g):
@@ -53,12 +58,15 @@ def c(f, g):
 
 class Array(Sequence):
     """
-    Immutable list where all items can only be of a single type
+    Immutable sequence where all items can only be of a single type
     """
 
     def __init__(self, *items):
-        if len(items) == 1 and isinstance(head(items), list):
-            items = head(items)
+        if len(items) == 1:
+            if isinstance(head(items), list):
+                items = head(items)
+            if isgenerator(head(items)):
+                items = [x for x in head(items)]
         self._items = [x for x in items if isinstance(x, type(head(items)))]
 
     def __repr__(self):
