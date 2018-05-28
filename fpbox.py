@@ -43,7 +43,7 @@ def bool_filter(f, xs):
     return [x for x in xs if f(x) is True]
 
 
-def foldl(f, acc, xs):
+def foldl(f, acc, xs):  # TODO: Get this working with Arrays
     return reduce(f, ([acc] + xs))
 
 
@@ -83,7 +83,8 @@ class Array(Sequence):
         if isinstance(head(self.items), Char):  # Creates a representation of [Char]
             unpacked_chars = map(lambda x: x.char, self.items)
             return '"{}"'.format(sum(unpacked_chars))
-        return str(list(self.items))
+        else:
+            return str(list(self.items))
 
     def __add__(self, other):
         if isinstance(other, Array):
