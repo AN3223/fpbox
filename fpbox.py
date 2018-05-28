@@ -95,7 +95,7 @@ class Array(Sequence):
     def __add__(self, other):
         if isinstance(other, Array):
             other = other.items
-        return Array(tuple(self.items) + tuple(other))
+        return Array(self.items + tuple(other))
 
     def __getitem__(self, item):
         return self.items[item]
