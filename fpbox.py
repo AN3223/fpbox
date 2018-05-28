@@ -72,16 +72,19 @@ class Array(Sequence):
     """
 
     def __init__(self, *items):
-        if len(items) == 1:
+        if len(items) == 1:  # Deconstructs single instances of generator and list
             if isinstance(head(items), list):
                 items = head(items)
             if isgenerator(head(items)):
                 items = list(head(items))
-        self.items = tuple([x for x in items if isinstance(x, type(head(items)))])
+        for x in items:  # Checks if all items are the same type
+            if not isinstance(x, type(head(items))):
+                raise FPboxException("You can't mix types in an Array")
+        self.items = tuple(items)
 
     def __repr__(self):
         if isinstance(head(self.items), Char):  # Creates a representation of [Char]
-            unpacked_chars = map(lambda x: x.char, self.items)
+            unpacked_chars = [x.char for x in self.items]
             return '"{}"'.format(sum(unpacked_chars))
         else:
             return str(list(self.items))
