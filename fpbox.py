@@ -43,8 +43,11 @@ def bool_filter(f, xs):
     return [x for x in xs if f(x) is True]
 
 
-def foldl(f, acc, xs):  # TODO: Get this working with Arrays
-    return reduce(f, ([acc] + xs))
+def foldl(f, acc, xs):
+    # Double reverses cancel each other out, so you can think of it like this:
+    # reduce(f, ([acc] + xs))
+    # However, it's done like this so foldl can work on Arrays
+    return reduce(f, reverse(reverse(xs) + [acc]))
 
 
 def foldr(f, acc, xs):
@@ -73,7 +76,7 @@ class Array(Sequence):
 
     def __init__(self, *items):
         if len(items) == 1:  # Deconstructs single instances of generator and list
-            if isinstance(head(items), list):
+            if isinstance(head(items), list) or isinstance(head(items), tuple):
                 items = head(items)
             if isgenerator(head(items)):
                 items = list(head(items))
@@ -92,7 +95,7 @@ class Array(Sequence):
     def __add__(self, other):
         if isinstance(other, Array):
             other = other.items
-        return Array(list(self.items) + list(other))
+        return Array(tuple(self.items) + tuple(other))
 
     def __getitem__(self, item):
         return self.items[item]
@@ -106,7 +109,7 @@ class Char:
         if isinstance(char, str) and len(char) == 1:
             self.char = char
         else:
-            raise Exception("Invalid char")
+            raise FPboxException("Invalid char")
 
     def __repr__(self):
         return "'{}'".format(self.char)
