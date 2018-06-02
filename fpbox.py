@@ -75,7 +75,7 @@ class Array(Sequence):
     """
 
     def __init__(self, *items):
-        if len(items) == 1:  # Deconstructs single instances of generator and list
+        if len(items) == 1:  # Deconstructs single instances of generator/list/tuple
             if isinstance(head(items), list) or isinstance(head(items), tuple):
                 items = head(items)
             if isgenerator(head(items)):
