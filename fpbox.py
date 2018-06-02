@@ -122,7 +122,7 @@ class Char:
 
 
 def lazy(fn, xs, *predicates):
-    """Creates on-the-fly generators"""
+    """Makes a generator on-the-fly"""
     for x in xs:
         for p in predicates:
             if p(x):
