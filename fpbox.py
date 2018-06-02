@@ -119,3 +119,11 @@ class Char:
 
     def __add__(self, other):
         return self.char + other
+
+
+def lazy(fn, xs, *predicates):
+    for x in xs:
+        for p in predicates:
+            if p(x):
+                break
+        yield fn(x)
