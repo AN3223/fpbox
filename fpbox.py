@@ -75,7 +75,7 @@ class Array(Sequence):
     """
 
     def __init__(self, *items):
-        if len(items) == 1:  # Deconstructs single instances of generator/list/tuple
+        if len(items) == 1:  # Deconstructs single instances of generator and list
             if isinstance(head(items), list) or isinstance(head(items), tuple):
                 items = head(items)
             if isgenerator(head(items)):
@@ -121,7 +121,7 @@ class Char:
         return self.char + other
 
 
-def lazy(fn, xs, *predicates):
+def lazy(f, xs, *predicates):
     """Makes a generator on-the-fly"""
     stop = False
     for x in xs:
@@ -130,4 +130,4 @@ def lazy(fn, xs, *predicates):
                 stop = True
                 break
         if stop: break
-        yield fn(x)
+        yield f(x)
