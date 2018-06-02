@@ -123,8 +123,11 @@ class Char:
 
 def lazy(fn, xs, *predicates):
     """Makes a generator on-the-fly"""
+    stop = False
     for x in xs:
         for p in predicates:
-            if p(x):
+            if not p(x):
+                stop = True
                 break
+        if stop: break
         yield fn(x)
