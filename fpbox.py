@@ -1,7 +1,6 @@
 from functools import reduce
 from collections.abc import Sequence
 from inspect import isgenerator
-from copy import deepcopy
 
 
 class FPboxException(Exception):
