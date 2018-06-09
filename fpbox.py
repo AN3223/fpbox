@@ -1,6 +1,7 @@
 from functools import reduce
 from collections.abc import Sequence
 from inspect import isgenerator
+from copy import deepcopy
 
 
 class FPboxException(Exception):
@@ -131,3 +132,15 @@ def lazy(f, xs, *predicates):
                 break
         if stop: break
         yield f(x)
+
+
+def partition(f, xs):
+    """
+    Applies a function that returns a bool to each element of a sequence and
+    returns a tuple with a true sequence and a false sequence.
+    Should not be called with an impure function
+    """
+    t = type(xs)
+    true = filter(f, xs)
+    false = [x for x in xs if x not in true]
+    return t(true), t(false)
