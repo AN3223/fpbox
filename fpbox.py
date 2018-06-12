@@ -1,4 +1,4 @@
-from functools import reduce
+from functools import reduce, lru_cache
 from collections.abc import Sequence
 from inspect import isgenerator
 
@@ -137,9 +137,23 @@ def partition(f, xs):
     """
     Applies a function that returns a bool to each element of a sequence and
     returns a tuple with a true sequence and a false sequence.
-    Should not be called with an impure function
+    Should not be called with an impure function.
     """
     t = type(xs)
     true = filter(f, xs)
     false = [x for x in xs if x not in true]
     return t(true), t(false)
+
+
+def pure(memo=False):
+    """Mark a function as pure, optionally taking
+    advantage of functool's lru_cache decorator"""
+
+    def inner(f):
+        if memo:
+            return lru_cache()(f)
+        else:
+            return f
+
+    return inner
+
