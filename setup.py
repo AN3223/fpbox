@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='fpbox',
-    version='0.4.0',
+    version='0.4.1',
     description='A toolbox for functional programming in Python',
     url='https://github.com/AN3223/fpbox',
     author='AN3223',
