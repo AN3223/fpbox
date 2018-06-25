@@ -2,6 +2,7 @@ from functools import reduce, lru_cache
 from collections.abc import Sequence
 from inspect import isgenerator
 from builtins import map as lazymap, filter as lazyfilter
+from operator import add
 
 
 class FPboxException(Exception):
@@ -36,7 +37,7 @@ def filter(f, xs):
 
 def sum(xs):
     """Sum implementation that also works on non-int types"""
-    return reduce(lambda x, y: x + y, xs)
+    return reduce(add, xs)
 
 
 def foldl(f, acc, xs):
@@ -57,7 +58,7 @@ def reverse(xs):
 
 def chars(string):
     """Returns an array of characters"""
-    return Array(map(Char, string))
+    return Array(map(Char, list(string)))
 
 
 def c(f, g):
@@ -177,3 +178,6 @@ class Stream:
 
     def tuple(self):
         return tuple(self)
+
+
+print(chars("hello"))
