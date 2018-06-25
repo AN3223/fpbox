@@ -29,7 +29,8 @@ reversed_string = reverse(chars("Racecar"))
 string_comprehension = Array([Char(x) for x in 'hello' if not x == 'h'])
 
 # The Stream class takes a sequence and returns a generator, and also
-# gives a handful of FP-related methods
+# gives a handful of FP-related methods. Map isn't actually applied to
+# any of the elements yet, because we haven't asked for any yet.
 lazy_xs_plus_one = Stream(xs).map(lambda x: x + 1)
 
 
@@ -43,9 +44,7 @@ def quicksort(xs):
     else:
         return xs
 
-
 one_to_five_ascending = quicksort([5, 4, 3, 2, 1])
-
 ```
 
 # Reference
