@@ -1,5 +1,0 @@
-Reference
-=================================
-
-.. automodule:: fpbox
-   :members:
