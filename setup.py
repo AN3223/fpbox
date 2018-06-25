@@ -1,8 +1,8 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name='fpbox',
-    version='0.3.0',
+    version='0.4.0',
     description='A toolbox for functional programming in Python',
     url='https://github.com/AN3223/fpbox',
     author='AN3223',
@@ -12,5 +12,5 @@ setup(
         'Topic :: Software Development :: Build Tools',
         'Programming Language :: Python :: 3.6',
     ],
-    packages=find_packages(exclude=['build', 'doc', 'dist', 'contrib'])
+    py_modules=['fpbox']
 )
