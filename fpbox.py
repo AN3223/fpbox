@@ -36,14 +36,17 @@ def filter(f, xs):
 
 
 def sum(xs):
-    """Sum implementation that also works on non-int types"""
+    """
+    A "sum" implementation that can take 
+    advantage of operator overloading
+    """
     return reduce(add, xs)
 
 
 def foldl(f, acc, xs):
     # Double reverses cancel each other out, so you can think of it like this:
     # reduce(f, ([acc] + xs))
-    # However, it's done like this so foldl can work on Arrays
+    # However, it's done like this so foldl can work on Arrays w/ operator overloading
     return reduce(f, reverse(reverse(xs) + [acc]))
 
 
@@ -57,7 +60,10 @@ def reverse(xs):
 
 
 def chars(string):
-    """Returns an array of characters"""
+    """
+    Helper function that returns an array of
+     characters from a string
+    """
     return Array(map(Char, list(string)))
 
 
@@ -105,6 +111,7 @@ class Array(Sequence):
 
 
 class Char:
+    """Holds a single character"""
     def __init__(self, char):
         if isinstance(char, str) and len(char) == 1:
             self.char = char
@@ -169,7 +176,9 @@ class Stream:
         return Stream(inner())
 
     def list(self):
+        """Packs the stream up into a list"""
         return list(self)
 
     def tuple(self):
+        """Packs the stream up into a tuple"""
         return tuple(self)
