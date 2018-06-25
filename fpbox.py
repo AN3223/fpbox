@@ -1,4 +1,4 @@
-from functools import reduce, lru_cache
+from functools import reduce
 from collections.abc import Sequence
 from inspect import isgenerator
 from builtins import map as lazymap, filter as lazyfilter
@@ -67,7 +67,12 @@ def c(f, g):
 
 
 class Array(Sequence):
-    """Immutable homogenous list"""
+    """
+    Immutable homogenous collection. It can be initialized with either a
+    single list/tuple/generator (which will return an Array consisting of the
+    contents of said list/tuple/generator) or it can just be given a bunch of
+    arguments to initialize the Array with
+    """
 
     def __init__(self, *items):
         if len(items) == 1:  # Deconstructs single instances of generator and list/tuple
@@ -118,9 +123,9 @@ class Char:
 
 def partition(f, xs):
     """
-    Applies a function that returns a bool to each element of a sequence and
-    returns a tuple with a true sequence and a false sequence.
-    Should not be called with an impure function.
+    Works similar to filter, except it returns two-item tuple where the
+     first item is the sequence of items that passed the filter and the
+      second is a sequence of items that didn't pass the filter
     """
     t = type(xs)
     true = filter(f, xs)
@@ -128,22 +133,14 @@ def partition(f, xs):
     return t(true), t(false)
 
 
-def pure(memo=False):
-    """Mark a function as pure, optionally taking
-    advantage of functool's lru_cache decorator"""
-
-    def inner(f):
-        if memo:
-            return lru_cache()(f)
-        else:
-            return f
-
-    return inner
-
-
 class Stream:
-    """Takes any iterable, returns a Stream object that
-    gives access to a set of lazy methods"""
+    """
+    Takes any iterable, returns a Stream object that gives access to
+    a set of lazy (FP-related) methods. Some things to note: no methods
+    mutate the iterable, most methods return a Stream object, and the
+    Stream objects themselves are generators that yield the contents
+    of the original iterable
+    """
 
     def __init__(self, xs):
         self.xs = xs
