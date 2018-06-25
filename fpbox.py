@@ -99,11 +99,12 @@ class Array(Sequence):
 
 class Char:
     """Holds a single character"""
+
     def __init__(self, char):
         if isinstance(char, str) and len(char) == 1:
             self.char = char
         else:
-            raise FPboxException("Invalid char")
+            raise FPboxException("Invalid input, Chars must be str with a length of 1")
 
     def __repr__(self):
         return "'{}'".format(self.char)
@@ -140,8 +141,7 @@ class Stream:
         self.xs = xs
 
     def __iter__(self):
-        for x in self.xs:
-            yield x
+        return (x for x in self.xs)
 
     def map(self, f):
         return Stream(lazymap(f, self))
@@ -150,7 +150,7 @@ class Stream:
         return Stream(lazyfilter(f, self))
 
     def reduce(self, f):
-        return reduce(f, self)
+        return Stream([reduce(f, self)])  # Strict
 
     def takewhile(self, f):
         def inner():
