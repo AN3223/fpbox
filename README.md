@@ -7,7 +7,7 @@ A toolkit for functional programming in Python
 # Examples
 ```python
 from functools import partial as p
-from fpbox.fpbox import *
+from fpbox import *
 
 xs = Array([1, 2, 3])
 sum_of_xs = foldr(lambda x, y: x + y, 0, xs)
@@ -19,7 +19,7 @@ one_two = init(xs)
 fn_composition = c(last, c(reverse, p(map, lambda x: x + 1)))(xs)
 reversed_string = reverse(chars("Racecar"))
 string_comprehension = Array([Char(x) for x in 'hello' if not x == 'h'])
-lazily_made_list = list(lazy(lambda x: x*2, xs))
+lazy_xs_plus_one = Stream(xs).map(lambda x: x + 1)
 ```
 
 # Reference
