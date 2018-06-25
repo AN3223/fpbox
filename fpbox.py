@@ -176,5 +176,3 @@ class Stream:
 
     def tuple(self):
         return tuple(self)
-
-print(Array([1,2,3]))
