@@ -67,9 +67,7 @@ def c(f, g):
 
 
 class Array(Sequence):
-    """
-    Immutable sequence where all items can only be of a single type
-    """
+    """Immutable homogenous list"""
 
     def __init__(self, *items):
         if len(items) == 1:  # Deconstructs single instances of generator and list
