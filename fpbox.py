@@ -1,6 +1,7 @@
 from functools import reduce, lru_cache
 from collections.abc import Sequence
 from inspect import isgenerator
+from builtins import map as lazymap, filter as lazyfilter
 
 
 class FPboxException(Exception):
@@ -25,22 +26,17 @@ def init(xs):
 
 def map(f, xs):
     """Strict version of map"""
-    return [f(x) for x in xs]
+    return type(xs)(lazymap(f, xs))
 
 
 def filter(f, xs):
-    """Strict version of filter (uses truthiness)"""
-    return [x for x in xs if f(x)]
+    """Strict version of filter"""
+    return type(xs)(lazyfilter(f, xs))
 
 
 def sum(xs):
     """Sum implementation that also works on non-int types"""
     return reduce(lambda x, y: x + y, xs)
-
-
-def bool_filter(f, xs):
-    """Strict version of filter (no truthiness, only booleans)"""
-    return [x for x in xs if f(x) is True]
 
 
 def foldl(f, acc, xs):
@@ -121,18 +117,6 @@ class Char:
         return self.char + other
 
 
-def lazy(f, xs, *predicates):
-    """Makes a generator on-the-fly"""
-    stop = False
-    for x in xs:
-        for p in predicates:
-            if not p(x):
-                stop = True
-                break
-        if stop: break
-        yield f(x)
-
-
 def partition(f, xs):
     """
     Applies a function that returns a bool to each element of a sequence and
@@ -157,3 +141,39 @@ def pure(memo=False):
 
     return inner
 
+
+class Stream:
+    """Takes any iterable, returns a Stream object that
+    gives access to a set of lazy methods"""
+
+    def __init__(self, xs):
+        self.xs = xs
+
+    def __iter__(self):
+        for x in self.xs:
+            yield x
+
+    def map(self, f):
+        return Stream(lazymap(f, self))
+
+    def filter(self, f):
+        return Stream(lazyfilter(f, self))
+
+    def reduce(self, f):
+        return reduce(f, self)
+
+    def takewhile(self, f):
+        def inner():
+            for x in self:
+                if f(x):
+                    yield x
+                else:
+                    break
+
+        return Stream(inner())
+
+    def list(self):
+        return list(self)
+
+    def tuple(self):
+        return tuple(self)
