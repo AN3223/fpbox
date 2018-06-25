@@ -10,7 +10,6 @@ from functools import partial as p
 from fpbox import *
 
 xs = Array([1, 2, 3])
-sum_of_xs = foldr(lambda x, y: x + y, 0, xs)
 three_two_one = reverse(xs)
 one = head(xs)
 two_three = tail(xs)
