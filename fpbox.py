@@ -37,7 +37,7 @@ def filter(f, xs):
 
 def sum(xs):
     """
-    A "sum" implementation that can take 
+    A "sum" implementation that can take
     advantage of operator overloading
     """
     return reduce(add, xs)
@@ -130,7 +130,7 @@ class Char:
 
 def partition(f, xs):
     """
-    Works similar to filter, except it returns two-item tuple where the
+    Works similar to filter, except it returns a two-item tuple where the
      first item is the sequence of items that passed the filter and the
       second is a sequence of items that didn't pass the filter
     """
