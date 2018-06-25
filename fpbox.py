@@ -178,6 +178,3 @@ class Stream:
 
     def tuple(self):
         return tuple(self)
-
-
-print(chars("hello"))
