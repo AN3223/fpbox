@@ -23,4 +23,4 @@ lazy_xs_plus_one = Stream(xs).map(lambda x: x + 1)
 ```
 
 # Reference
-Read the source code! :D
+https://fpbox.readthedocs.io/en/latest/
