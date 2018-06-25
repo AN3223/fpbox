@@ -37,21 +37,9 @@ def filter(f, xs):
 
 def sum(xs):
     """
-    A "sum" implementation that can take
-    advantage of operator overloading
+    A "sum" implementation that can take advantage of operator overloading
     """
     return reduce(add, xs)
-
-
-def foldl(f, acc, xs):
-    # Double reverses cancel each other out, so you can think of it like this:
-    # reduce(f, ([acc] + xs))
-    # However, it's done like this so foldl can work on Arrays w/ operator overloading
-    return reduce(f, reverse(reverse(xs) + [acc]))
-
-
-def foldr(f, acc, xs):
-    return reduce(f, (reverse(xs) + [acc]))
 
 
 def reverse(xs):
@@ -61,8 +49,7 @@ def reverse(xs):
 
 def chars(string):
     """
-    Helper function that returns an array of
-     characters from a string
+    Helper function that returns an array of characters from a string
     """
     return Array(map(Char, list(string)))
 
@@ -131,8 +118,8 @@ class Char:
 def partition(f, xs):
     """
     Works similar to filter, except it returns a two-item tuple where the
-     first item is the sequence of items that passed the filter and the
-      second is a sequence of items that didn't pass the filter
+    first item is the sequence of items that passed the filter and the
+    second is a sequence of items that didn't pass the filter
     """
     t = type(xs)
     true = filter(f, xs)
