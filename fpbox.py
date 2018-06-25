@@ -70,7 +70,7 @@ class Array(Sequence):
     """Immutable homogenous list"""
 
     def __init__(self, *items):
-        if len(items) == 1:  # Deconstructs single instances of generator and list
+        if len(items) == 1:  # Deconstructs single instances of generator and list/tuple
             if isinstance(head(items), list) or isinstance(head(items), tuple):
                 items = head(items)
             if isgenerator(head(items)):
@@ -176,3 +176,5 @@ class Stream:
 
     def tuple(self):
         return tuple(self)
+
+print(Array([1,2,3]))
