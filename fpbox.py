@@ -42,6 +42,36 @@ def sum(xs):
     return reduce(add, xs)
 
 
+def lazy_dropwhile(f, xs):
+    done_dropping = False
+    for x in xs:
+        if not done_dropping:
+            if not f(x):
+                done_dropping = True
+        else:
+            yield x
+
+
+def lazy_takewhile(f, xs):
+    for x in xs:
+        if f(x):
+            yield x
+        else:
+            break
+
+
+def lazy_reduce(f, xs):
+    yield reduce(f, xs)
+
+
+def dropwhile(f, xs):
+    return type(xs)(lazy_dropwhile(f, xs))
+
+
+def takewhile(f, xs):
+    return type(xs)(lazy_takewhile(f, xs))
+
+
 def reverse(xs):
     """Returns a reversed sequence"""
     return type(xs)(reversed(xs))
@@ -150,17 +180,13 @@ class Stream:
         return Stream(lazyfilter(f, self))
 
     def reduce(self, f):
-        return Stream([reduce(f, self)])  # Strict
+        return Stream(lazy_reduce(f, self))
 
     def takewhile(self, f):
-        def inner():
-            for x in self:
-                if f(x):
-                    yield x
-                else:
-                    break
+        return Stream(lazy_takewhile(f, self))
 
-        return Stream(inner())
+    def dropwhile(self, f):
+        return Stream(lazy_dropwhile(f, self))
 
     def list(self):
         """Packs the stream up into a list"""
