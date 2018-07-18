@@ -42,6 +42,16 @@ def sum(xs):
     return reduce(add, xs)
 
 
+def lazy(f):
+    """
+    Used as a decorator to make a function lazy. Simply yields the result of the function.
+    """
+    def inner(*args):
+        yield f(*args)
+
+    return inner
+
+
 def lazy_dropwhile(f, xs):
     done_dropping = False
     for x in xs:
@@ -60,8 +70,9 @@ def lazy_takewhile(f, xs):
             break
 
 
+@lazy
 def lazy_reduce(f, xs):
-    yield reduce(f, xs)
+    return reduce(f, xs)
 
 
 def dropwhile(f, xs):
