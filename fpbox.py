@@ -3,7 +3,6 @@ from collections.abc import Sequence
 from inspect import isgenerator
 from builtins import map as lazymap, filter as lazyfilter
 from operator import add
-from pandas import Series
 
 
 class FPboxException(Exception):
@@ -47,7 +46,6 @@ def lazy(f):
     """
     Used as a decorator to make a function lazy. Simply yields the result of the function.
     """
-
     def inner(*args):
         yield f(*args)
 
@@ -116,13 +114,10 @@ class Array(Sequence):
                 items = head(items)
             if isgenerator(head(items)):
                 items = list(head(items))
-
-        self.type = type(head(items))
-        for x in items:  # Ensures all items are the same type
-            if not isinstance(x, self.type):
+        for x in items:  # Checks if all items are the same type
+            if not isinstance(x, type(head(items))):
                 raise FPboxException("You can't mix types in an Array")
-
-        self.items = Series(items)
+        self.items = tuple(items)
 
     def __repr__(self):
         if isinstance(head(self.items), Char):  # Creates a representation of [Char]
