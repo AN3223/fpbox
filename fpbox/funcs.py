@@ -39,6 +39,11 @@ def binmap(f, xs):
     return type(xs)(lazy_binmap(f, xs))
 
 
+def reverse_binmap(f, xs):
+    """Strict version of lazy_reverse_binmap"""
+    return type(xs)(lazy_reverse_binmap(f, xs))
+
+
 def filter(f, xs):
     """Strict version of filter"""
     return type(xs)(lazy_filter(f, xs))
@@ -72,6 +77,13 @@ def lazy_binmap(f, xs):
         if index + 1 == len(xs):
             break
         yield f(xs[index], xs[index + 1])
+
+
+def lazy_reverse_binmap(f, xs):
+    for index in range(len(xs)):
+        if index + 1 == len(xs):
+            break
+        yield f(xs[index + 1], xs[index])
 
 
 def lazy_dropwhile(f, xs):
