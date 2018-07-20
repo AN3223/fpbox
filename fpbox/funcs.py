@@ -75,6 +75,10 @@ def lazy_binmap(f, xs):
 
 
 def lazy_dropwhile(f, xs):
+    """
+    Returns a sequences with every item from the beginning removed
+    that causes f to return True
+    """
     done_dropping = False
     for x in xs:
         if not done_dropping:
@@ -85,6 +89,10 @@ def lazy_dropwhile(f, xs):
 
 
 def lazy_takewhile(f, xs):
+    """
+    Returns every item of a sequence, until it encounters an item that
+    causes f to return false.
+    """
     for x in xs:
         if f(x):
             yield x
