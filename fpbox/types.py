@@ -96,7 +96,6 @@ class Array(Sequence):
 
 class Char:
     """Holds a single character"""
-
     def __init__(self, char):
         if isinstance(char, str) and len(char) == 1:
             self.char = char
