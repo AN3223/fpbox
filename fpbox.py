@@ -3,10 +3,22 @@ from collections.abc import Sequence
 from inspect import isgenerator
 from builtins import map as lazymap, filter as lazyfilter
 from operator import add
+from functools import wraps
 
 
 class FPboxException(Exception):
     pass
+
+
+def lazy(f):
+    """
+    A decorator to simply yield the result of the function.
+    """
+    @wraps(f)
+    def lazyfunc(*args):
+        yield f(*args)
+
+    return lazyfunc
 
 
 def head(xs):
@@ -30,6 +42,11 @@ def map(f, xs):
     return type(xs)(lazymap(f, xs))
 
 
+def binmap(f, xs):
+    """Strict version of lazy_binmap"""
+    return type(xs)(lazy_binmap(f, xs))
+
+
 def filter(f, xs):
     """Strict version of filter"""
     return type(xs)(lazyfilter(f, xs))
@@ -42,14 +59,15 @@ def sum(xs):
     return reduce(add, xs)
 
 
-def lazy(f):
+def lazy_binmap(f, xs):
     """
-    Used as a decorator to make a function lazy. Simply yields the result of the function.
+    Maps a binary function over a sequence. The function is applied to each item
+    and the item after it until the last item is reached.
     """
-    def inner(*args):
-        yield f(*args)
-
-    return inner
+    for index in range(len(xs)):
+        if index + 1 == len(xs):
+            break
+        yield f(xs[index], xs[index + 1])
 
 
 def lazy_dropwhile(f, xs):
