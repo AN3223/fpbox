@@ -6,6 +6,7 @@ from operator import add
 
 def lazy(f):
     """A decorator to simply yield the result of a function"""
+
     @wraps(f)
     def lazyfunc(*args):
         yield f(*args)
@@ -80,6 +81,9 @@ def lazy_binmap(f, xs):
 
 
 def lazy_reverse_binmap(f, xs):
+    """
+    Same as lazy_binmap, except the parameters are flipped for the binary function
+    """
     for index in range(len(xs)):
         if index + 1 == len(xs):
             break
