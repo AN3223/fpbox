@@ -140,3 +140,7 @@ def reverse(xs):
 def c(f, g):
     """Function composition"""
     return lambda x: f(g(x))
+
+def compose(fs):
+    """Function composition over a list of functions"""
+    return reduce(c, reversed(fs))
