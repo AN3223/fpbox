@@ -74,20 +74,14 @@ def lazy_binmap(f, xs):
     Maps a binary function over a sequence. The function is applied to each item
     and the item after it until the last item is reached.
     """
-    for index in range(len(xs)):
-        if index + 1 == len(xs):
-            break
-        yield f(xs[index], xs[index + 1])
+    return (f(x, y) for x, y in zip(xs, xs[1:]))
 
 
 def lazy_reverse_binmap(f, xs):
     """
     Same as lazy_binmap, except the parameters are flipped for the binary function
     """
-    for index in range(len(xs)):
-        if index + 1 == len(xs):
-            break
-        yield f(xs[index + 1], xs[index])
+    return (f(y, x) for x, y in zip(xs, xs[1:]))
 
 
 def lazy_dropwhile(f, xs):
