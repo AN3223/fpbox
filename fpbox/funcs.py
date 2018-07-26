@@ -137,4 +137,4 @@ def c(f, g):
 
 def compose(fs):
     """Function composition over a list of functions"""
-    return reduce(c, reversed(fs))
+    return reduce(c, fs)
