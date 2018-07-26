@@ -20,7 +20,7 @@ one_two = init(xs)
 
 # Gets the last item of a reversed sequence that has been mapped over
 # with a function that adds one to each value
-fn_composition = c(last, c(reverse, p(map, lambda x: x + 1)))(xs)
+fn_composition = compose([last, reverse, p(map, lambda x: x + 1)])(list(xs))
 
 # Use strings like normal sequences with the "chars" helper function
 reversed_string = reverse(chars("Racecar"))
@@ -44,7 +44,9 @@ def quicksort(xs):
     else:
         return xs
 
+
 one_to_five_ascending = quicksort([5, 4, 3, 2, 1])
+
 ```
 
 # Reference
