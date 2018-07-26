@@ -1,8 +1,8 @@
 from collections.abc import Sequence
 from inspect import isgenerator
+from builtins import map as lazymap, filter as lazyfilter
 
 from .funcs import *
-
 
 class FPboxException(Exception):
     pass
@@ -24,10 +24,10 @@ class Stream:
         return (x for x in self.xs)
 
     def map(self, f):
-        return Stream(lazy_map(f, self))
+        return Stream(lazymap(f, self))
 
     def filter(self, f):
-        return Stream(lazy_filter(f, self))
+        return Stream(lazyfilter(f, self))
 
     def reduce(self, f):
         return Stream(lazy_reduce(f, self))
@@ -82,6 +82,11 @@ class Array(Sequence):
         else:
             return str(list(self.items))
 
+    def __str__(self):
+        if self.type == Char:
+            return self.__repr__()[1:-1]
+        return self.__repr__()
+
     def __add__(self, other):
         if isinstance(other, Array):
             other = other.items
@@ -96,6 +101,7 @@ class Array(Sequence):
 
 class Char:
     """Holds a single character"""
+
     def __init__(self, char):
         if isinstance(char, str) and len(char) == 1:
             self.char = char
