@@ -85,46 +85,10 @@ def lazy_reverse_binmap(f, xs):
     return (f(y, x) for x, y in zip(xs, xs[1:]))
 
 
-def lazy_dropwhile(f, xs):
-    """
-    Returns a sequences with every item from the beginning removed
-    that causes f to return True
-    """
-    done_dropping = False
-    for x in xs:
-        if not done_dropping:
-            if not f(x):
-                done_dropping = True
-        else:
-            yield x
-
-
-def lazy_takewhile(f, xs):
-    """
-    Returns every item of a sequence, until it encounters an item that
-    causes f to return false.
-    """
-    for x in xs:
-        if f(x):
-            yield x
-        else:
-            break
-
-
 @lazy
 def lazy_reduce(f, xs):
     """Lazy version of functools.reduce"""
     return reduce(f, xs)
-
-
-def dropwhile(f, xs):
-    """Strict version of lazy_dropwhile"""
-    return type(xs)(lazy_dropwhile(f, xs))
-
-
-def takewhile(f, xs):
-    """Strict version of lazy_takewhile"""
-    return type(xs)(lazy_takewhile(f, xs))
 
 
 def reverse(xs):
