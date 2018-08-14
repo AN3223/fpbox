@@ -143,6 +143,11 @@ def compose(fs):
 
 
 class curry:
+    """
+    Takes a function, and then takes each argument for the function through __call__.
+    You probably shouldn't use this with builtins! Even if it seems to work with a builtin,
+    it might not work properly in previous versions of Python.
+    """
     def __init__(self, f):
         self.f = f
         try:
