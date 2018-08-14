@@ -1,6 +1,7 @@
 from collections.abc import Sequence
 from inspect import isgenerator
 from builtins import map as lazymap, filter as lazyfilter
+from itertools import takewhile, dropwhile
 
 from .funcs import *
 
@@ -33,10 +34,10 @@ class Stream:
         return Stream(lazy_reduce(f, self))
 
     def takewhile(self, f):
-        return Stream(lazy_takewhile(f, self))
+        return Stream(takewhile(f, self))
 
     def dropwhile(self, f):
-        return Stream(lazy_dropwhile(f, self))
+        return Stream(dropwhile(f, self))
 
     def list(self):
         """Packs the stream up into a list"""
