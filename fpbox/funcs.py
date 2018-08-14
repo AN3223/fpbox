@@ -2,6 +2,7 @@ from builtins import map as lazy_map, filter as lazy_filter
 from functools import reduce
 from functools import wraps
 from operator import add
+from inspect import signature
 
 
 def lazy(f):
@@ -135,6 +136,23 @@ def c(f, g):
     """Function composition"""
     return lambda x: f(g(x))
 
+
 def compose(fs):
     """Function composition over a list of functions"""
     return reduce(c, fs)
+
+
+class curry:
+    def __init__(self, f):
+        self.f = f
+        try:
+            self.nargs_required = len(signature(f).parameters)
+        except ValueError as e:
+            raise ValueError(str(e) + " (maybe you're trying to curry a built-in?)")
+        self.args_supplied = []
+
+    def __call__(self, arg):
+        self.args_supplied.append(arg)
+        if len(self.args_supplied) == self.nargs_required:
+            return self.f(*self.args_supplied)
+        return self
