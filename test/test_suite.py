@@ -32,6 +32,12 @@ class TestBox(unittest.TestCase):
         f = fp.compose([lambda x: x + 1, lambda x: x * 100])
         self.assertEqual(f(1), 101)
 
+    def test_curry(self):
+        @fp.curry
+        def curried_func(x, y):
+            return x, y
+
+        self.assertEqual(curried_func(10)(20), (10, 20))
 
 if __name__ == '__main__':
     unittest.main()
