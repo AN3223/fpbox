@@ -1,5 +1,6 @@
 import unittest
 import fpbox as fp
+from itertools import dropwhile, takewhile
 
 
 class TestBox(unittest.TestCase):
@@ -16,8 +17,18 @@ class TestBox(unittest.TestCase):
 
     def test_stream(self):
         xs = fp.Array(1, 2, 3, 4, 5)
+
         xs_mapped = fp.Stream(xs).map(lambda x: x + 1).list()
         self.assertEqual(xs_mapped, [x + 1 for x in xs])
+
+        def less_than_four(x):
+            return x < 4
+
+        xs_takewhile = fp.Stream(xs).takewhile(less_than_four).list()
+        self.assertEqual(xs_takewhile, list(takewhile(less_than_four, xs)))
+
+        xs_dropwhile = fp.Stream(xs).dropwhile(less_than_four).list()
+        self.assertEqual(xs_dropwhile, list(dropwhile(less_than_four, xs)))
 
     def test_binmap(self):
         from operator import sub
@@ -38,6 +49,7 @@ class TestBox(unittest.TestCase):
             return x, y
 
         self.assertEqual(curried_func(10)(20), (10, 20))
+
 
 if __name__ == '__main__':
     unittest.main()
