@@ -34,6 +34,9 @@ lazy_xs_plus_one = Stream(xs).map(lambda x: x + 1)
 # Calculating the amount of numbers between each number in the Array
 distance_between = reverse_binmap(sub, xs)
 
+curried_function = curry(lambda x, y: x + y)  # Curries a function
+curried_result = curried_function(1)(2)  # Result is 3!
+
 
 # Here's a quicksort implementation that shows how the tools
 # FPBox offers can be used for great good
