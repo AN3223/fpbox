@@ -44,11 +44,15 @@ class TestBox(unittest.TestCase):
         self.assertEqual(f(1), 101)
 
     def test_curry(self):
-        @fp.curry
-        def curried_func(x, y):
+        def test(x, y):
             return x, y
 
-        self.assertEqual(curried_func(10)(20), (10, 20))
+        f = fp.curry(test)
+        f10 = f(10)
+        f20 = f(20)
+
+        self.assertEqual(f10(20), (10, 20))
+        self.assertEqual(f20(10), (20, 10))
 
 
 if __name__ == '__main__':
