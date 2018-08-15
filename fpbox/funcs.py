@@ -106,22 +106,21 @@ def compose(fs):
     return reduce(c, fs)
 
 
-class curry:
+def curry(f, args_supplied=()):
     """
-    Takes a function, and then returns a callable that takes each argument for the original
+    Takes a function, and then returns a function that takes each argument for the original
     function through __call__. You probably shouldn't use this with builtins! Even if it seems
     to work with a builtin, it might not work properly in previous versions of Python.
     """
-    def __init__(self, f, args_supplied=()):
-        self.f = f
-        try:
-            self.nargs_required = len(signature(f).parameters)
-        except ValueError as e:
-            raise ValueError(str(e) + " (maybe you're trying to curry a built-in?)")
-        self.args_supplied = args_supplied
+    try:
+        nargs_required = len(signature(f).parameters)
+    except ValueError as e:
+        raise ValueError(str(e) + " (maybe you're trying to curry a built-in?)")
 
-    def __call__(self, arg):
-        new_args_supplied = self.args_supplied + (arg,)
-        if len(new_args_supplied) == self.nargs_required:
-            return self.f(*new_args_supplied)
-        return curry(self.f, new_args_supplied)
+    def inner(arg):
+        new_args_supplied = args_supplied + (arg,)
+        if len(new_args_supplied) == nargs_required:
+            return f(*new_args_supplied)
+        return curry(f, new_args_supplied)
+
+    return inner
