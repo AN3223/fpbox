@@ -108,20 +108,20 @@ def compose(fs):
 
 class curry:
     """
-    Takes a function, and then takes each argument for the function through __call__.
-    You probably shouldn't use this with builtins! Even if it seems to work with a builtin,
-    it might not work properly in previous versions of Python.
+    Takes a function, and then returns a callable that takes each argument for the original
+    function through __call__. You probably shouldn't use this with builtins! Even if it seems
+    to work with a builtin, it might not work properly in previous versions of Python.
     """
-    def __init__(self, f):
+    def __init__(self, f, args_supplied=()):
         self.f = f
         try:
             self.nargs_required = len(signature(f).parameters)
         except ValueError as e:
             raise ValueError(str(e) + " (maybe you're trying to curry a built-in?)")
-        self.args_supplied = []
+        self.args_supplied = args_supplied
 
     def __call__(self, arg):
-        self.args_supplied.append(arg)
-        if len(self.args_supplied) == self.nargs_required:
-            return self.f(*self.args_supplied)
-        return self
+        new_args_supplied = self.args_supplied + (arg,)
+        if len(new_args_supplied) == self.nargs_required:
+            return self.f(*new_args_supplied)
+        return curry(self.f, new_args_supplied)
