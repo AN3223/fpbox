@@ -40,7 +40,11 @@ class TestBox(unittest.TestCase):
         self.assertEqual(str(fp.chars('hello')), 'hello')
 
     def test_compose(self):
-        f = fp.compose([lambda x: x + 1, lambda x: x * 100])
+        fs = [lambda x: x + 1, lambda x: x * 100]
+        f = fp.compose(fs)
+        self.assertEqual(f(1), 101)
+
+        f = fp.compose(*fs)
         self.assertEqual(f(1), 101)
 
     def test_curry(self):
@@ -53,6 +57,16 @@ class TestBox(unittest.TestCase):
 
         self.assertEqual(f10(20), (10, 20))
         self.assertEqual(f20(10), (20, 10))
+
+    def test_collect(self):
+        def genericfunction(*items):
+            return fp.collect(items)
+
+        xs = (1,2,3,4)
+
+        self.assertEqual(xs, genericfunction(xs))
+        self.assertEqual(xs, genericfunction(list(xs)))
+        self.assertEqual(xs, genericfunction((x for x in xs)))
 
 
 if __name__ == '__main__':

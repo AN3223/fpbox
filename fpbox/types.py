@@ -57,24 +57,10 @@ class Array(Sequence):
     """
 
     def __init__(self, *items):
-        self.type = type(head(items))
-        items = self._collect(items)
-        self.items = tuple(items)
-        self._check_types()
-
-    def _collect(self, items):
-        if len(items) == 1:
-            if self.type == list or self.type == tuple:
-                items = head(items)
-            if isgenerator(head(items)):
-                items = tuple(*items)
-            self.type = type(head(items))
-        return items
-
-    def _check_types(self):
-        for x in self.items:
-            if not isinstance(x, self.type):
-                raise FPboxException("You can't mix types in an Array")
+        self.items = collect(items)
+        self.type = type(head(self.items))
+        if False in (isinstance(x, self.type) for x in self.items):
+            raise FPboxException("You can't mix types in an Array")
 
     def __repr__(self):
         if self.type == Char:  # Creates a representation of [Char]
