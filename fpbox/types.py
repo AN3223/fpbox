@@ -1,9 +1,16 @@
 from collections.abc import Sequence
-from inspect import isgenerator
 from builtins import map as lazymap, filter as lazyfilter
 from itertools import takewhile, dropwhile
 
 from .funcs import *
+
+__all__ = [
+    "Stream",
+    "Array",
+    "Char",
+    "chars",
+    "FPboxException"
+]
 
 class FPboxException(Exception):
     pass
@@ -51,21 +58,22 @@ class Stream:
 class Array(Sequence):
     """
     Immutable homogenous collection. It can be initialized with either a
-    single list/tuple/generator (which will return an Array consisting of the
-    contents of said list/tuple/generator) or it can just be given multiple
-    arguments to initialize the Array with
+    single iterable (which will return an Array consisting of the contents
+    of said iterable) or it can be given multiple arguments to initialize
+    the Array with
     """
 
     def __init__(self, *items):
         self.items = collect(items)
-        self.type = type(head(self.items))
-        if False in (isinstance(x, self.type) for x in self.items):
+        self.type = type(head(self.items)) if self.items else None
+        if self.type and not any(isinstance(x, self.type) for x in self.items):
             raise FPboxException("You can't mix types in an Array")
 
     def __repr__(self):
-        if self.type == Char:  # Creates a representation of [Char]
-            unpacked_chars = [x.char for x in self.items]
-            return '"{}"'.format(sum(unpacked_chars))
+        if self.type == Char:  # Creates a representation of Array(Char)
+            return '"{}"'.format(sum(x.char for x in self.items))
+        elif self.type is None:
+            return "[]"
         else:
             return str(list(self.items))
 
@@ -79,11 +87,16 @@ class Array(Sequence):
             other = other.items
         return Array(self.items + tuple(other))
 
-    def __getitem__(self, item):
-        return self.items[item]
+    def __getitem__(self, i):
+        return self.items[i]
 
     def __len__(self):
         return len(self.items)
+
+    def __eq__(self, other):
+        if not isinstance(other, Array):
+            return False
+        return self.items == other.items
 
 
 class Char:
@@ -109,4 +122,4 @@ def chars(string):
     """
     Helper function that returns an array of characters from a string
     """
-    return Array(map(Char, list(string)))
+    return map(Char, Array(string))
