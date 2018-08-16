@@ -102,7 +102,10 @@ def c(f, g):
 
 
 def compose(*fs):
-    """Function composition over a list of functions"""
+    """
+    Function composition over a sequence of functions. Functions can be supplied
+    as multiple arguments, a tuple, a list, or a generator
+    """
     return reduce(c, collect(fs))
 
 
