@@ -1,8 +1,8 @@
 from builtins import map as lazy_map, filter as lazy_filter
+from inspect import signature, isgenerator
 from functools import reduce
 from functools import wraps
 from operator import add
-from inspect import signature
 
 
 def lazy(f):
@@ -101,9 +101,9 @@ def c(f, g):
     return lambda x: f(g(x))
 
 
-def compose(fs):
+def compose(*fs):
     """Function composition over a list of functions"""
-    return reduce(c, fs)
+    return reduce(c, collect(fs))
 
 
 def curry(f, args_supplied=()):
@@ -124,3 +124,23 @@ def curry(f, args_supplied=()):
         return curry(f, new_args_supplied)
 
     return inner
+
+
+def collect(items, convert=(list, tuple), convert_to=tuple):
+    """
+    Converts a nested list/tuple/generator into a tuple. If no nested list/tuple/generator
+    is found (or if multiple are found) then "items" is returned unchanged to the caller.
+    Useful for generic functions.
+
+    :param items: Target sequence
+    :param convert: Tuple of types to convert into target type
+    :param convert_to: Target type
+    :return: The collected sequence
+    """
+    if len(items) == 1:
+        head_item = head(items)
+        if True in (isinstance(head_item, t) for t in convert):
+            items = convert_to(*items)
+        elif isgenerator(head(items)):
+            items = convert_to(*items)
+    return items
