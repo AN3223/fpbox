@@ -21,10 +21,13 @@ one_two = init(xs)
 # Function composition, right to left
 fn_composition = compose(last, reverse)(xs)
 
-# Use strings like normal sequences with the "chars" helper function
+# Use strings more like tuples/lists/sets with the "chars" helper function
+# This wouldn't work with normal strings because the str constructor would 
+# just try to create a representation of the map object used under the hood 
+# by "reverse"
 reversed_string = reverse(chars("Racecar"))
 
-# Really pushing the strings-as-sequences idea with string comprehension
+# String comprehension!
 string_comprehension = Array([Char(x) for x in 'hello' if not x == 'h'])
 
 # The Stream class takes a sequence and returns a generator, and also
@@ -32,7 +35,7 @@ string_comprehension = Array([Char(x) for x in 'hello' if not x == 'h'])
 lazy_xs_plus_one = Stream(xs).map(lambda x: x + 1)
 
 # Calculating the amount of numbers between each number in the Array
-distance_between = reverse_binmap(sub, xs)
+distance_between = flipped_binmap(sub, xs)
 
 curried_function = curry(lambda x, y: x + y)  # Curries a function
 curried_result = curried_function(1)(2)  # Result is 3!
@@ -45,8 +48,7 @@ def quicksort(xs):
         pivot = head(xs)
         lesser, greater = map(quicksort, partition(lambda x: x < pivot, tail(xs)))
         return lesser + [pivot] + greater
-    else:
-        return xs
+    return xs
 
 
 one_to_five_ascending = quicksort([5, 4, 3, 2, 1])
