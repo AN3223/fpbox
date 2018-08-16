@@ -1,8 +1,35 @@
 from builtins import map as lazy_map, filter as lazy_filter
-from inspect import signature, isgenerator
+from collections import Iterable
+from inspect import signature
 from functools import reduce
 from functools import wraps
 from operator import add
+
+
+__all__ = [
+    "lazy",
+    "head",
+    "tail",
+    "last",
+    "init",
+    "map",
+    "binmap",
+    "flipped_binmap",
+    "filter",
+    "sum",
+    "partition",
+    "lazy_binmap",
+    "lazy_flipped_binmap",
+    "lazy_reduce",
+    "reverse",
+    "c",
+    "compose",
+    "curry",
+    "collect",
+    "lazy_map",
+    "lazy_filter",
+    "reduce"
+]
 
 
 def lazy(f):
@@ -41,9 +68,9 @@ def binmap(f, xs):
     return type(xs)(lazy_binmap(f, xs))
 
 
-def reverse_binmap(f, xs):
-    """Strict version of lazy_reverse_binmap"""
-    return type(xs)(lazy_reverse_binmap(f, xs))
+def flipped_binmap(f, xs):
+    """Strict version of lazy_flipped_binmap"""
+    return type(xs)(lazy_flipped_binmap(f, xs))
 
 
 def filter(f, xs):
@@ -78,7 +105,7 @@ def lazy_binmap(f, xs):
     return (f(x, y) for x, y in zip(xs, xs[1:]))
 
 
-def lazy_reverse_binmap(f, xs):
+def lazy_flipped_binmap(f, xs):
     """
     Same as lazy_binmap, except the parameters are flipped for the binary function
     """
@@ -92,7 +119,7 @@ def lazy_reduce(f, xs):
 
 
 def reverse(xs):
-    """Returns a reversed sequence"""
+    """Strict version of reversed"""
     return type(xs)(reversed(xs))
 
 
@@ -104,16 +131,16 @@ def c(f, g):
 def compose(*fs):
     """
     Function composition over a sequence of functions. Functions can be supplied
-    as multiple arguments, a tuple, a list, or a generator
+    as multiple arguments or a single iterable.
     """
     return reduce(c, collect(fs))
 
 
 def curry(f, args_supplied=()):
     """
-    Takes a function, and then returns a function that takes each argument for the original
-    function through __call__. You probably shouldn't use this with builtins! Even if it seems
-    to work with a builtin, it might not work properly in previous versions of Python.
+    Takes a function and returns a curried version of it. You probably shouldn't use this
+    with built-ins! Even if it seems to work with a built-in, it might not work properly
+    in previous versions of Python.
     """
     try:
         nargs_required = len(signature(f).parameters)
@@ -129,21 +156,15 @@ def curry(f, args_supplied=()):
     return inner
 
 
-def collect(items, convert=(list, tuple), convert_to=tuple):
+def collect(items, convert_to=tuple):
     """
-    Converts a nested list/tuple/generator into a tuple. If no nested list/tuple/generator
-    is found (or if multiple are found) then "items" is returned unchanged to the caller.
-    Useful for generic functions.
+    Converts a nested iterable into a tuple. If no nested iterable is found (or if multiple are
+    found) then "items" is returned unchanged to the caller. Useful for generic functions.
 
     :param items: Target sequence
-    :param convert: Tuple of types to convert into target type
     :param convert_to: Target type
-    :return: The collected sequence
+    :return: The "collected" sequence
     """
-    if len(items) == 1:
-        head_item = head(items)
-        if True in (isinstance(head_item, t) for t in convert):
-            items = convert_to(*items)
-        elif isgenerator(head(items)):
-            items = convert_to(*items)
+    if len(items) == 1 and isinstance(head(items), Iterable):
+        return convert_to(*items)
     return convert_to(items)
