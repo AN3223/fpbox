@@ -58,6 +58,16 @@ class TestBox(unittest.TestCase):
         self.assertEqual(f10(20), (10, 20))
         self.assertEqual(f20(10), (20, 10))
 
+    def test_collect(self):
+        def genericfunction(*items):
+            return fp.collect(items)
+
+        xs = (1,2,3,4)
+
+        self.assertEqual(xs, genericfunction(xs))
+        self.assertEqual(xs, genericfunction(list(xs)))
+        self.assertEqual(xs, genericfunction((x for x in xs)))
+
 
 if __name__ == '__main__':
     unittest.main()
