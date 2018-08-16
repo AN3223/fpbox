@@ -19,7 +19,7 @@ three = last(xs)
 one_two = init(xs)
 
 # Function composition, right to left
-fn_composition = compose([last, reverse])(xs)
+fn_composition = compose(last, reverse)(xs)
 
 # Use strings like normal sequences with the "chars" helper function
 reversed_string = reverse(chars("Racecar"))
