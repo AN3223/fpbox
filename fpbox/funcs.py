@@ -143,4 +143,4 @@ def collect(items, convert=(list, tuple), convert_to=tuple):
             items = convert_to(*items)
         elif isgenerator(head(items)):
             items = convert_to(*items)
-    return items
+    return convert_to(items)
