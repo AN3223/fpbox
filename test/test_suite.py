@@ -34,7 +34,7 @@ class TestBox(unittest.TestCase):
         from operator import sub
 
         xs = [10, 15, 20, 25, 30]
-        self.assertEqual(fp.reverse_binmap(sub, xs), [5, 5, 5, 5])
+        self.assertEqual(fp.flipped_binmap(sub, xs), [5, 5, 5, 5])
 
     def test_chars(self):
         self.assertEqual(str(fp.chars('hello')), 'hello')
@@ -67,6 +67,16 @@ class TestBox(unittest.TestCase):
         self.assertEqual(xs, genericfunction(xs))
         self.assertEqual(xs, genericfunction(list(xs)))
         self.assertEqual(xs, genericfunction((x for x in xs)))
+
+    def test_array(self):
+        xs = fp.Array([1, 2, 3])
+
+        self.assertEqual(fp.Array(1, 2, 3), xs)
+        self.assertEqual(fp.Array((1, 2, 3)), xs)
+        self.assertEqual(fp.Array({1, 2, 3}), xs)
+        self.assertEqual(fp.map(int, fp.Array("123")), xs)
+
+        self.assertEqual(xs + fp.Array(), xs)
 
 
 if __name__ == '__main__':
