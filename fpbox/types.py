@@ -66,7 +66,7 @@ class Array(Sequence):
     def __init__(self, *items):
         self.items = collect(items)
         self.type = type(head(self.items)) if self.items else None
-        if self.type and not any(isinstance(x, self.type) for x in self.items):
+        if self.type and not is_homogenous(self.items):
             raise FPboxException("You can't mix types in an Array")
 
     def __repr__(self):
