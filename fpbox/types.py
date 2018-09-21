@@ -5,7 +5,6 @@ from itertools import takewhile, dropwhile
 from .funcs import *
 
 __all__ = [
-    "Stream",
     "Array",
     "Char",
     "chars",
@@ -15,45 +14,6 @@ __all__ = [
 
 class FPboxException(Exception):
     pass
-
-
-class Stream:
-    """
-    Takes any iterable, returns a Stream object that gives access to
-    a set of lazy (FP-related) methods. Some things to note: no methods
-    mutate the iterable, most methods return a Stream object, and the
-    Stream objects themselves are generators that yield the contents
-    of the original iterable
-    """
-
-    def __init__(self, xs):
-        self.xs = xs
-
-    def __iter__(self):
-        return (x for x in self.xs)
-
-    def map(self, f):
-        return Stream(lazymap(f, self))
-
-    def filter(self, f):
-        return Stream(lazyfilter(f, self))
-
-    def reduce(self, f):
-        return Stream(lazy_reduce(f, self))
-
-    def takewhile(self, f):
-        return Stream(takewhile(f, self))
-
-    def dropwhile(self, f):
-        return Stream(dropwhile(f, self))
-
-    def list(self):
-        """Packs the stream up into a list"""
-        return list(self)
-
-    def tuple(self):
-        """Packs the stream up into a tuple"""
-        return tuple(self)
 
 
 class Array(tuple):
