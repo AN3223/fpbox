@@ -30,10 +30,6 @@ reversed_string = reverse(chars("Racecar"))
 # String comprehension!
 string_comprehension = Array([Char(x) for x in 'hello' if not x == 'h'])
 
-# The Stream class takes a sequence and returns a generator, and also
-# gives a handful of lazy FP-related methods. Just some syntactic sugar.
-lazy_xs_plus_one = Stream(xs).map(lambda x: x + 1)
-
 # Calculating the amount of numbers between each number in the Array
 distance_between = flipped_binmap(sub, xs)
 
