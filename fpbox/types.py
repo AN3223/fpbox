@@ -30,7 +30,7 @@ class Array(tuple):
 
     def __repr__(self):
         if isinstance(head(self), Char):
-            return '"{}"'.format(sum(x.char for x in self))
+            return '"{}"'.format(sum(self))
         return str(list(self))
 
     def __str__(self):
@@ -39,24 +39,19 @@ class Array(tuple):
         return self.__repr__()
 
 
-class Char:
+class Char(str):
     """Holds a single character"""
 
-    def __init__(self, char):
-        if isinstance(char, str) and len(char) == 1:
-            self.char = char
-        else:
+    def __new__(cls, char):
+        if not isinstance(char, str) and len(char) == 1:
             raise FPboxException(
-                "Invalid input, Chars must be str with a length of 1")
+                "Invalid input, Chars must be str with a length of 1"
+            )
+        return str.__new__(cls, char)
 
     def __repr__(self):
-        return "'{}'".format(self.char)
+        return "'{}'".format(self)
 
-    def __str__(self):
-        return self.char
-
-    def __add__(self, other):
-        return self.char + other
 
 
 def chars(string):
