@@ -12,6 +12,7 @@ __all__ = [
     "FPboxException"
 ]
 
+
 class FPboxException(Exception):
     pass
 
@@ -55,48 +56,27 @@ class Stream:
         return tuple(self)
 
 
-class Array(Sequence):
+class Array(tuple):
     """
     Immutable homogenous collection. It can be initialized with either a
-    single iterable (which will return an Array consisting of the contents
-    of said iterable) or it can be given multiple arguments to initialize
-    the Array with
+    single iterable or with multiple arguments.
     """
 
-    def __init__(self, *items):
-        self.items = collect(items)
-        self.type = type(head(self.items)) if self.items else None
-        if self.type and not is_homogenous(self.items):
+    def __new__(cls, *items):
+        items = collect(items)
+        if items and not is_homogenous(items):
             raise FPboxException("You can't mix types in an Array")
+        return tuple.__new__(cls, items)
 
     def __repr__(self):
-        if self.type == Char:  # Creates a representation of Array(Char)
-            return '"{}"'.format(sum(x.char for x in self.items))
-        elif self.type is None:
-            return "[]"
-        else:
-            return str(list(self.items))
+        if isinstance(head(self), Char):
+            return '"{}"'.format(sum(x.char for x in self))
+        return str(list(self))
 
     def __str__(self):
-        if self.type == Char:
+        if isinstance(head(self), Char):
             return self.__repr__()[1:-1]
         return self.__repr__()
-
-    def __add__(self, other):
-        if isinstance(other, Array):
-            other = other.items
-        return Array(self.items + tuple(other))
-
-    def __getitem__(self, i):
-        return self.items[i]
-
-    def __len__(self):
-        return len(self.items)
-
-    def __eq__(self, other):
-        if not isinstance(other, Array):
-            return False
-        return self.items == other.items
 
 
 class Char:
@@ -106,7 +86,8 @@ class Char:
         if isinstance(char, str) and len(char) == 1:
             self.char = char
         else:
-            raise FPboxException("Invalid input, Chars must be str with a length of 1")
+            raise FPboxException(
+                "Invalid input, Chars must be str with a length of 1")
 
     def __repr__(self):
         return "'{}'".format(self.char)
