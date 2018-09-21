@@ -28,7 +28,8 @@ __all__ = [
     "collect",
     "lazy_map",
     "lazy_filter",
-    "reduce"
+    "reduce",
+    "is_homogenous"
 ]
 
 
@@ -145,7 +146,9 @@ def curry(f, args_supplied=()):
     try:
         nargs_required = len(signature(f).parameters)
     except ValueError as e:
-        raise ValueError(str(e) + " (maybe you're trying to curry a built-in?)")
+        raise ValueError(
+            str(e) + " (maybe you're trying to curry a built-in?)"
+        )
 
     def inner(arg):
         new_args_supplied = args_supplied + (arg,)
@@ -168,3 +171,10 @@ def collect(items, convert_to=tuple):
     if len(items) == 1 and isinstance(head(items), Iterable):
         return convert_to(*items)
     return convert_to(items)
+
+
+def is_homogenous(xs):
+    t = type(head(xs))
+    if any(not isinstance(x, t) for x in xs):
+        return False
+    return True
