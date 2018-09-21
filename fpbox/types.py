@@ -1,7 +1,3 @@
-from collections.abc import Sequence
-from builtins import map as lazymap, filter as lazyfilter
-from itertools import takewhile, dropwhile
-
 from .funcs import *
 
 __all__ = [
