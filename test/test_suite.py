@@ -15,21 +15,6 @@ class TestBox(unittest.TestCase):
 
         self.assertEqual(quicksort([5, 4, 3, 2, 1]), [1, 2, 3, 4, 5])
 
-    def test_stream(self):
-        xs = fp.Array(1, 2, 3, 4, 5)
-
-        xs_mapped = fp.Stream(xs).map(lambda x: x + 1).list()
-        self.assertEqual(xs_mapped, [x + 1 for x in xs])
-
-        def less_than_four(x):
-            return x < 4
-
-        xs_takewhile = fp.Stream(xs).takewhile(less_than_four).list()
-        self.assertEqual(xs_takewhile, list(takewhile(less_than_four, xs)))
-
-        xs_dropwhile = fp.Stream(xs).dropwhile(less_than_four).list()
-        self.assertEqual(xs_dropwhile, list(dropwhile(less_than_four, xs)))
-
     def test_binmap(self):
         from operator import sub
 
@@ -77,6 +62,7 @@ class TestBox(unittest.TestCase):
         self.assertEqual(fp.map(int, fp.Array("123")), xs)
 
         self.assertEqual(xs + fp.Array(), xs)
+
 
 
 if __name__ == '__main__':
