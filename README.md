@@ -22,13 +22,13 @@ one_two = init(xs)
 fn_composition = compose(last, reverse)(xs)
 
 # Use strings more like tuples/lists/sets with the "chars" helper function
-# This wouldn't work with normal strings because the str constructor would 
-# just try to create a representation of the map object used under the hood 
+# This wouldn't work with normal strings because the str constructor would
+# just try to create a representation of the map object used under the hood
 # by "reverse"
 reversed_string = reverse(chars("Racecar"))
 
 # String comprehension!
-string_comprehension = Array([Char(x) for x in 'hello' if not x == 'h'])
+string_comprehension = Array(Char(x) for x in 'hello' if not x == 'h')
 
 # Calculating the amount of numbers between each number in the Array
 distance_between = flipped_binmap(sub, xs)
