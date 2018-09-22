@@ -7,7 +7,8 @@ class TestBox(unittest.TestCase):
         def quicksort(xs):
             if len(xs) > 1:
                 pivot = fp.head(xs)
-                sort = lambda x: x < pivot
+
+                def sort(x): return x < pivot
                 lesser, greater = fp.partition(sort, fp.tail(xs))
                 return quicksort(lesser) + [pivot] + quicksort(greater)
             else:
@@ -63,6 +64,11 @@ class TestBox(unittest.TestCase):
 
         self.assertEqual(xs + fp.Array(), xs)
         self.assertEqual(fp.Array(), fp.Array())
+
+    def test_homogeneous(self):
+        self.assertTrue(fp.is_homogeneous([]))
+        self.assertTrue(fp.is_homogeneous([1, 2, 3]))
+        self.assertFalse(fp.is_homogeneous([1, 2, "3"]))
 
 
 if __name__ == '__main__':
