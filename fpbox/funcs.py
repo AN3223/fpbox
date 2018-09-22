@@ -29,7 +29,7 @@ __all__ = [
     "lazy_map",
     "lazy_filter",
     "reduce",
-    "is_homogenous"
+    "is_homogeneous"
 ]
 
 
@@ -139,9 +139,7 @@ def compose(*fs):
 
 def curry(f, args_supplied=()):
     """
-    Takes a function and returns a curried version of it. You probably shouldn't use this
-    with built-ins! Even if it seems to work with a built-in, it might not work properly
-    in previous versions of Python.
+    Takes a function and returns a curried version of it (don't use with built-ins).
     """
     try:
         nargs_required = len(signature(f).parameters)
@@ -173,8 +171,17 @@ def collect(items, convert_to=tuple):
     return convert_to(items)
 
 
-def is_homogenous(xs):
-    t = type(head(xs))
+def is_homogeneous(xs):
+    """
+    Checks if an iterable is homogeneous in type.
+
+    :param xs: Iterable to be checked
+    :return: Boolean, representing whether the iterable is homogeneous
+    """
+    try:
+        t = type(head(xs))
+    except IndexError:
+        return True
     if any(not isinstance(x, t) for x in xs):
         return False
     return True
