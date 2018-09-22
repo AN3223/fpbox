@@ -57,7 +57,6 @@ class Char(str):
         return "'{}'".format(self)
 
 
-
 def chars(string):
     """
     Helper function that returns an array of characters from a string
