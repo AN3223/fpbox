@@ -59,7 +59,6 @@ class TestBox(unittest.TestCase):
 
         self.assertEqual(fp.Array(1, 2, 3), xs)
         self.assertEqual(fp.Array((1, 2, 3)), xs)
-        self.assertEqual(fp.Array({1, 2, 3}), xs)
         self.assertEqual(fp.map(int, fp.Array("123")), xs)
 
         self.assertEqual(xs + fp.Array(), xs)
