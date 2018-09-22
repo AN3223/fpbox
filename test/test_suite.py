@@ -1,6 +1,5 @@
 import unittest
 import fpbox as fp
-from itertools import dropwhile, takewhile
 
 
 class TestBox(unittest.TestCase):
@@ -8,8 +7,9 @@ class TestBox(unittest.TestCase):
         def quicksort(xs):
             if len(xs) > 1:
                 pivot = fp.head(xs)
-                lesser, greater = map(quicksort, fp.partition(lambda x: x < pivot, fp.tail(xs)))
-                return lesser + [pivot] + greater
+                sort = lambda x: x < pivot
+                lesser, greater = fp.partition(sort, fp.tail(xs))
+                return quicksort(lesser) + [pivot] + quicksort(greater)
             else:
                 return xs
 
@@ -47,7 +47,7 @@ class TestBox(unittest.TestCase):
         def genericfunction(*items):
             return fp.collect(items)
 
-        xs = (1,2,3,4)
+        xs = (1, 2, 3, 4)
 
         self.assertEqual(xs, genericfunction(xs))
         self.assertEqual(xs, genericfunction(list(xs)))
@@ -62,7 +62,7 @@ class TestBox(unittest.TestCase):
         self.assertEqual(fp.map(int, fp.Array("123")), xs)
 
         self.assertEqual(xs + fp.Array(), xs)
-
+        self.assertEqual(fp.Array(), fp.Array())
 
 
 if __name__ == '__main__':
