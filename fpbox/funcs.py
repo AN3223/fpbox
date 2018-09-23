@@ -1,13 +1,12 @@
-from typing import TypeVar, Collection, Any, Sequence, Callable, Generator, Tuple
-from typing import Iterable as IterableType
-from collections import Iterable
-
 from builtins import map as lazy_map, filter as lazy_filter
+from collections import Iterable
 from inspect import signature
 from functools import reduce
 from functools import wraps
 from operator import add
 
+from typing import Tuple, Generator
+from .static import T, I, C, S, F
 
 __all__ = [
     "head",
@@ -32,12 +31,6 @@ __all__ = [
     "reduce",
     "is_homogeneous"
 ]
-
-T = Any
-I = IterableType
-C = Collection
-S = Sequence
-F = Callable
 
 
 def head(xs: S[T]) -> T:
