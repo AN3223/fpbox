@@ -4,13 +4,8 @@ from .static import I
 __all__ = [
     "Array",
     "Char",
-    "chars",
-    "FPboxException"
+    "chars"
 ]
-
-
-class FPboxException(Exception):
-    pass
 
 
 class Array(tuple):
@@ -22,7 +17,7 @@ class Array(tuple):
     def __new__(cls, *items):
         items = collect(items)
         if not is_homogeneous(items):
-            raise FPboxException("You can't mix types in an Array")
+            raise TypeError("You can't mix types in an Array")
         return tuple.__new__(cls, items)
 
     def is_chars(self):
@@ -49,7 +44,7 @@ class Char(str):
 
     def __new__(cls, char):
         if not isinstance(char, str) and len(char) == 1:
-            raise FPboxException(
+            raise ValueError(
                 "Invalid input, Char must be str with a length of 1"
             )
         return str.__new__(cls, char)
