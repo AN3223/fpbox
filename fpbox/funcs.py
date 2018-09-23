@@ -1,5 +1,8 @@
-from builtins import map as lazy_map, filter as lazy_filter
+from typing import TypeVar, Collection, Any, Sequence, Callable, Generator, Tuple
+from typing import Iterable as IterableType
 from collections import Iterable
+
+from builtins import map as lazy_map, filter as lazy_filter
 from inspect import signature
 from functools import reduce
 from functools import wraps
@@ -7,7 +10,6 @@ from operator import add
 
 
 __all__ = [
-    "lazy",
     "head",
     "tail",
     "last",
@@ -20,7 +22,6 @@ __all__ = [
     "partition",
     "lazy_binmap",
     "lazy_flipped_binmap",
-    "lazy_reduce",
     "reverse",
     "c",
     "compose",
@@ -32,61 +33,57 @@ __all__ = [
     "is_homogeneous"
 ]
 
-
-def lazy(f):
-    """A decorator to simply yield the result of a function"""
-
-    @wraps(f)
-    def lazyfunc(*args):
-        yield f(*args)
-
-    return lazyfunc
+T = Any
+I = IterableType
+C = Collection
+S = Sequence
+F = Callable
 
 
-def head(xs):
+def head(xs: S[T]) -> T:
     return xs[0]
 
 
-def tail(xs):
+def tail(xs: S) -> S:
     return xs[1:]
 
 
-def last(xs):
+def last(xs: S[T]) -> T:
     return xs[-1]
 
 
-def init(xs):
+def init(xs: S) -> S:
     return xs[:-1]
 
 
-def map(f, xs):
+def map(f: F, xs: T) -> I:
     """Strict version of map"""
     return type(xs)(lazy_map(f, xs))
 
 
-def binmap(f, xs):
+def binmap(f: F, xs: T) -> I:
     """Strict version of lazy_binmap"""
     return type(xs)(lazy_binmap(f, xs))
 
 
-def flipped_binmap(f, xs):
+def flipped_binmap(f: F, xs: T) -> I:
     """Strict version of lazy_flipped_binmap"""
     return type(xs)(lazy_flipped_binmap(f, xs))
 
 
-def filter(f, xs):
+def filter(f: F, xs: T) -> I:
     """Strict version of filter"""
     return type(xs)(lazy_filter(f, xs))
 
 
-def sum(xs):
+def sum(xs: I) -> T:
     """
     A "sum" implementation that can take advantage of operator overloading
     """
     return reduce(add, xs)
 
 
-def partition(f, xs):
+def partition(f: F, xs: T) -> Tuple[T, T]:  # TODO: Make a lazy counterpart
     """
     Works similar to filter, except it returns a two-item tuple where the
     first item is the sequence of items that passed the filter and the
@@ -98,7 +95,7 @@ def partition(f, xs):
     return t(true), t(false)
 
 
-def lazy_binmap(f, xs):
+def lazy_binmap(f: F, xs: S) -> Generator:
     """
     Maps a binary function over a sequence. The function is applied to each item
     and the item after it until the last item is reached.
@@ -106,30 +103,24 @@ def lazy_binmap(f, xs):
     return (f(x, y) for x, y in zip(xs, xs[1:]))
 
 
-def lazy_flipped_binmap(f, xs):
+def lazy_flipped_binmap(f: F, xs: S) -> Generator:
     """
     Same as lazy_binmap, except the parameters are flipped for the binary function
     """
     return (f(y, x) for x, y in zip(xs, xs[1:]))
 
 
-@lazy
-def lazy_reduce(f, xs):
-    """Lazy version of functools.reduce"""
-    return reduce(f, xs)
-
-
-def reverse(xs):
+def reverse(xs: T) -> I:
     """Strict version of reversed"""
     return type(xs)(reversed(xs))
 
 
-def c(f, g):
+def c(f: F, g: F) -> F:
     """Function composition"""
     return lambda x: f(g(x))
 
 
-def compose(*fs):
+def compose(*fs: T) -> F:
     """
     Function composition over a sequence of functions. Functions can be supplied
     as multiple arguments or a single iterable.
@@ -137,19 +128,20 @@ def compose(*fs):
     return reduce(c, collect(fs))
 
 
-def curry(f, args_supplied=()):
+def curry(f: F, args_supplied: tuple = ()) -> F:
     """
     Takes a function and returns a curried version of it (don't use with built-ins).
     """
     try:
-        nargs_required = len(signature(f).parameters)
+        nargs_required: int = len(signature(f).parameters)
     except ValueError as e:
         raise ValueError(
             str(e) + " (maybe you're trying to curry a built-in?)"
         )
 
+    @wraps(f)
     def inner(arg):
-        new_args_supplied = args_supplied + (arg,)
+        new_args_supplied: tuple = args_supplied + (arg,)
         if len(new_args_supplied) == nargs_required:
             return f(*new_args_supplied)
         return curry(f, new_args_supplied)
@@ -157,10 +149,10 @@ def curry(f, args_supplied=()):
     return inner
 
 
-def collect(items, convert_to=tuple):
+def collect(items: S, convert_to: type = tuple) -> I:
     """
     Converts a nested iterable into a tuple. If no nested iterable is found (or if multiple are
-    found) then "items" is returned unchanged to the caller. Useful for generic functions.
+    found) then "items" is returned unchanged to the caller.
 
     :param items: Target sequence
     :param convert_to: Target type
@@ -171,7 +163,7 @@ def collect(items, convert_to=tuple):
     return convert_to(items)
 
 
-def is_homogeneous(xs):
+def is_homogeneous(xs: S) -> bool:
     """
     Checks if an iterable is homogeneous in type.
 
@@ -179,7 +171,7 @@ def is_homogeneous(xs):
     :return: Boolean, representing whether the iterable is homogeneous
     """
     try:
-        t = type(head(xs))
+        t: type = type(head(xs))
     except IndexError:
         return True
     if any(not isinstance(x, t) for x in xs):
