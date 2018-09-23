@@ -42,9 +42,12 @@ curried_result = curried_function(1)(2)  # Result is 3!
 def quicksort(xs):
     if len(xs) > 1:
         pivot = head(xs)
-        lesser, greater = map(quicksort, partition(lambda x: x < pivot, tail(xs)))
-        return lesser + [pivot] + greater
-    return xs
+
+        def sort(x): return x < pivot
+        lesser, greater = partition(sort, tail(xs))
+        return quicksort(lesser) + [pivot] + quicksort(greater)
+    else:
+        return xs
 
 
 one_to_five_ascending = quicksort([5, 4, 3, 2, 1])
