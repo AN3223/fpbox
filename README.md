@@ -27,9 +27,6 @@ fn_composition = compose(last, reverse)(xs)
 # by "reverse"
 reversed_string = reverse(chars("Racecar"))
 
-# String comprehension!
-string_comprehension = Array(Char(x) for x in 'hello' if not x == 'h')
-
 # Calculating the amount of numbers between each number in the Array
 distance_between = flipped_binmap(sub, xs)
 
