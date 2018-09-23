@@ -1,4 +1,5 @@
 from .funcs import map, sum, head, is_homogeneous, collect
+from .static import I
 
 __all__ = [
     "Array",
@@ -57,7 +58,7 @@ class Char(str):
         return "'{}'".format(self)
 
 
-def chars(string: str):
+def chars(string: str) -> I:
     """
     Helper function that returns an array of characters from a string
     """
