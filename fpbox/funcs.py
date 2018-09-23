@@ -69,7 +69,7 @@ def filter(f: F, xs: T) -> I:
     return type(xs)(lazy_filter(f, xs))
 
 
-def sum(xs: I) -> T:
+def sum(xs: I) -> I:
     """
     A "sum" implementation that can take advantage of operator overloading
     """
