@@ -1,4 +1,4 @@
-from .funcs import *
+from .funcs import map, sum, head, is_homogeneous, collect
 
 __all__ = [
     "Array",
@@ -32,12 +32,12 @@ class Array(tuple):
             return False
         return False
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         if self.is_chars():
             return '"{}"'.format(sum(self))
         return str(list(self))
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.is_chars():
             return self.__repr__()[1:-1]
         return self.__repr__()
@@ -53,11 +53,11 @@ class Char(str):
             )
         return str.__new__(cls, char)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "'{}'".format(self)
 
 
-def chars(string):
+def chars(string: str):
     """
     Helper function that returns an array of characters from a string
     """
