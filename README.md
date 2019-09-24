@@ -1,6 +1,9 @@
 # FPbox
 A toolkit for functional programming in Python
 
+# Disclaimer
+I wrote this tool when I was first learning about Python and FP. It doesn't provide much that Python doesn't already have.
+
 # Install
 `pip install fpbox`
 
